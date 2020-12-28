@@ -361,56 +361,30 @@ def main():
     print(generator_root)
     instructions_folder = os.path.join(generator_root, "instructions")
     parser = argparse.ArgumentParser()
-    parser.add_argument("--lyr", default="v.lyr")
-    parser.add_argument("--tim", default="v.tim")
-    parser.add_argument("--tass", default="v.tass")
+    parser.add_argument("--lyr", default="lyrics.lyr")
+    parser.add_argument("--tim", default="timings.tim")
+    parser.add_argument("--tass", default="output.tass")
     args = parser.parse_args()
     lyr = args.lyr
     tim = args.tim
     tass = args.tass
 
+    lyr_str = ""
+    with open(lyr, mode='r', encoding="utf-8") as f_lyr:
+        lyr_str = f_lyr.read()
+
+    tim_str = ""
+    with open(tim, mode='r', encoding="utf-8") as f_tim:
+        tim_str = f_tim.read()
+
     _generator = Generator(instructions_folder=instructions_folder)
-    # t = ClassicGenerator().generate(lyr_path=lyr,
-    #                                 tim_path=tim)
-    print("=" * 10)
-    # print(t)
 
+    tass_str = _generator.generate(
+        lyr_str=lyr_str, tim_str=tim_str,
+        render_format="tass", continue_on_error=False)
 
-    # with open(tass, 'w', encoding="utf-8") as f:
-    #     f.write(t)
-
-
-    lyr_text = """
-# comment
-%info ligatures yes
-%info カラオケ 涼宮
-%credit 0 100 ss
-%effect cursor true
-%effect fading 1000 500 -100 50
-%style Extra Fontsize=30 Fontname='comic sans MS' Alignment=8
-%credit 0 800 Fontsize=30 Fontname='comic sans MS' Alignment=8
-#%style nom:parent Fontsize=30 Fontname='comic sans MS' Alignment=8
-#%style   nom:  Fontsize=30 Fontname='comic sans MS' Alignment=8
-#%style
-&sa&i&ko &no &GI&F&T\\
-&sa&a &ro&u&so&ku &no \\\\\\&hi &wo \\N&ke\\\\&shi&te
-&wa&ta&shi &ka&ra &a&na&ta &he &to{
-&a
-"""
-    print("GENERATE START")
-    logging.basicConfig(level=logging.DEBUG)
-    generator = Generator()
-    output = generator.generate(lyr_str=lyr_text, tim_str="39 45\n 1 3 5 xxxx",
-                                render_format="tass", continue_on_error=False)
-    print("<===OUTPUT_BEGIN===>")
-    print(output)
-    print("<====OUTPUT_END====>")
-    import pprint
-    pprint.pprint(generator.context, sort_dicts=False)
-    print("GENERATE END")
-    for event in generator.context["events"]["processed"]:
-        print("<{}>".format(event.Style), "{{{}}}".format(event.Effect),
-              '|'.join((x.text for x in event.components)))
+    with open(tass, mode='w+', encoding="utf-8") as f_tass:
+        f_tass.write(tass_str)
 
 
 if __name__ == '__main__':
