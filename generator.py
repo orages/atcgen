@@ -52,31 +52,6 @@ class TimParser(object):
             yield line
 
 
-# class Instruction(object):
-
-#     def __init__(self, name, parser):
-#         self.name = name
-#         self.parser = parser
-
-#     def parse(self, string, parseAll=True):
-#         return ParsedLyrInstructionLine(
-#             self.parser.parseString(string, parseAll=parseAll),
-#             string,
-#             self)
-
-#     def apply(self, generation_context):
-#         pass
-
-
-# class EffectInstruction(Instruction):
-
-#     def __init__(self, name, parser):
-#         super(EffectInstruction, self).__init__(name=name, parser=parser)
-
-#     def apply(self, generation_context):
-#         pass
-
-
 class TimEntry(object):
 
     def __init__(self, parsed_tim):
@@ -314,66 +289,6 @@ class Generator(object):
     @current_event.setter
     def current_event(self, value):
         self.context["events"]["current"] = value
-
-    def _compile(self, lyr_str, tim_str, continue_on_error=False):
-        self.init_context()
-        self.context["lyr"]["content"] = lyr_str
-        self.context["tim"]["content"] = tim_str
-        lyr_parser = self.lyr_parser_class(lyr_str)
-        tim_parser = self.tim_parser_class(tim_str)
-        tim_generator = TimEntryGenerator(tim_parser)
-        soft_break = False
-        context = self.context
-        self.current_event = self.create_event()
-        for i, line in enumerate(lyr_parser, start=1):
-            _LOGGER.debug("process line (%s): %s", i, repr(line))
-            try:
-                parsed_instruction = self.parse_instruction(line)
-                if parsed_instruction:
-                    instruction_args_str = parsed_instruction[1]
-                    instruction_name = parsed_instruction[0].lower()
-                    instruction = self.instructions[instruction_name]()
-                    instruction.process(line, instruction_args_str,
-                                        context)
-                    continue
-                parsed_lyrics = self.parsed_lyrics(line)
-                if parsed_lyrics:
-                    if soft_break == False:
-                        self.current_event = self.create_event()
-                    if parsed_lyrics[-1] == SOFT_BREAK:
-                        soft_break = True
-                        parsed_lyrics.pop(-1)
-                    else:
-                        soft_break = False
-                    context["styles"]["used"].add(context["styles"]["active"])
-                    context["styles"]["used"].add(context["styles"]["active"])
-                    _LOGGER.debug("parsed_lyrics: %s", parsed_lyrics)
-                    for syllab_text, tim_entry in zip(parsed_lyrics,
-                                                      tim_generator):
-                        _LOGGER.debug("syllab: %s (%s)",
-                                      syllab_text, tim_entry)
-                        component = self.context["events"][
-                            "event_component_karaoke_syllab_class"](
-                            syllab_text,
-                            tim_entry, context)
-                        self.append_component(component)
-
-                    if not soft_break:
-                        self.complete_event()
-                        context["events"]["processed"].append(
-                            self.current_event)
-            except Exception as e:
-                if not continue_on_error:
-                    raise
-                _LOGGER.error("Generation failed on line %s: '%s'"
-                              " (%s: %s) skip...",
-                              i, line, type(e).__name__, e)
-        else:
-            if soft_break:
-                self.complete_event()
-                context["events"]["processed"].append(
-                    self.current_event)
-        self.current_event = None
 
     def _compile(self, lyr_str, tim_str, instructions_folder=None,
                  continue_on_error=False):
