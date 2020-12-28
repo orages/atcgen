@@ -1,5 +1,3 @@
-from collections import UserDict, UserList
-from utils import ExceptionShield
 import math
 
 class EventComponent():
