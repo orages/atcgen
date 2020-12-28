@@ -59,9 +59,9 @@ class PassingEffect(Effect):
         self.full_line = full_line
         self.args_str = args_str
         is_active, params = parsed_args = self.parse(self.args_str)
-        context["effects"]["active"] = is_active
+        context["effects"]["passing"]["active"] = is_active
         if params:
-            context["effects"]["params"] = PassingEffectArguments(*params)
+            context["effects"]["passing"]["params"] = PassingEffectArguments(*params)
 
     @staticmethod
     def set_up(context):
@@ -84,7 +84,9 @@ class PassingEffect(Effect):
                 "(event %s already has an event effect %s)",
                 event, event.Effect)
             return
+        elif not passing_context_data.get("active"):
+            return
         event.Effect = PassingEventEffect(*passing_context_data["params"])
 
 
-EFFECTS = {"cursor": PassingEffect}
+EFFECTS = {"passing": PassingEffect}
