@@ -23,15 +23,16 @@ class CreditInstruction(BaseInstruction):
     def __init__(self):
         super(BaseInstruction, self).__init__()
 
+    @staticmethod
     def set_up(context):
         if "Credit" not in context["styles"]["available"]:
             context["styles"]["available"]["Credit"] = Style(
                 Name="Credit",
                 Fontname="DejaVu Sans",
                 Fontsize=25,
-                PrimaryColour="&H0000FF00",
-                SecondaryColour="&H0000FFFF",
-                KaraokeColour="&H000000FF",
+                PrimaryColour="&H006044EEEE",
+                SecondaryColour="&H006044EEEE",
+                KaraokeColour="&H006044EEEE",
                 OutlineColour="&H00000000",
                 BackColour="&H00000000",
                 Bold=0,
@@ -85,6 +86,7 @@ class CreditInstruction(BaseInstruction):
         event.Style = "Credit"
         event.complete(context)
         context["events"]["processed"].append(event)
+        context["styles"]["used"].add("Credit")
 
 
 INSTRUCTIONS = {
