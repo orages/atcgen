@@ -1,7 +1,8 @@
 from itertools import chain
 from new_generator.renderer import BaseRenderer
 from new_generator.event import (EventComponentText,
-    EventComponentKaraokeSyllab, EventComponentEffect)
+                                 EventComponentKaraokeSyllab,
+                                 EventComponentEffect)
 
 
 def timestamp_to_time(ts):
@@ -21,9 +22,9 @@ def component_to_string(self, event, context):
 def escape(text):
     escapped_text = text.replace('\\', "\\\\")
     # escape by inserting zero length word separator character
-    escapped_text = escapped_text.replace("\n", "\\⁠N")
+    escapped_text = escapped_text.replace("\n", "\\N")
     escapped_text = escapped_text.replace("{", "\\{")
-    print("ESCAPE", text, "=>",  escapped_text)
+    print("ESCAPE", text, "=>", escapped_text)
     return escapped_text
 
 class TassRenderer(BaseRenderer):
@@ -89,7 +90,8 @@ class TassRenderer(BaseRenderer):
             else:
                 event_effect = event_dict["Effect"]
                 event_dict["Effect"] = ';'.join(
-                    chain((event_effect.name,), event_effect.args))
+                    [str(_) for _ in
+                     chain((event_effect.name,), event_effect.args)])
 
             lines.append("Dialogue: {}".format(
                 self.events_format.format(**event_dict)
