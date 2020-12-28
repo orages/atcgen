@@ -2,12 +2,25 @@ import os
 import sys
 import logging
 
+sys.path.insert(0, os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__))))
+print(sys.path)
 
-from event import Event, EventComponentKaraokeSyllab
-from style import Style
-from parsers import (INSTRUCTION_PARSER, LYRICS_PARSER,
-                     TIM_PARSER, SOFT_BREAK)
-from utils import ExceptionShield
+try:
+    from .event import Event, EventComponentKaraokeSyllab
+    from .style import Style
+    from .parsers import (INSTRUCTION_PARSER, LYRICS_PARSER,
+                          TIM_PARSER, SOFT_BREAK)
+    from .utils import ExceptionShield
+
+
+except ImportError as e:
+    from event import Event, EventComponentKaraokeSyllab
+    from style import Style
+    from parsers import (INSTRUCTION_PARSER, LYRICS_PARSER,
+                         TIM_PARSER, SOFT_BREAK)
+    from utils import ExceptionShield
 
 
 from pkgutil import iter_modules
