@@ -314,7 +314,7 @@ class Generator(object):
                     continue
                 parsed_lyrics = self.parsed_lyrics(line)
                 if parsed_lyrics:
-                    if soft_break == False:
+                    if soft_break is False:
                         self.current_event = self.create_event()
                     if parsed_lyrics[-1] == SOFT_BREAK:
                         soft_break = True
@@ -351,6 +351,28 @@ class Generator(object):
                     self.current_event)
         self.current_event = None
 
+    def get_instructions_help(self):
+        available_instructions = {}
+        self.init_context()
+        for instruction_name, instruction_class in self.instructions.items():
+            instruction_id = id(instruction_class)
+            if instruction_id not in available_instructions:
+                available_instructions[instruction_id] = {
+                    "class": instruction_class,
+                    "aliases": [instruction_name],
+                }
+            else:
+                available_instructions[instruction_id]["aliases"].append(
+                    instruction_name)
+
+        help_lines = []
+        for instruction_id, instruction_data in available_instructions.items():
+            headline = ', '.join(instruction_data["aliases"])
+            help_lines.append(headline)
+            help_lines.append('=' * len(headline))
+            desc = instruction_data["class"].help(self.context) or '/'
+            help_lines.append(desc)
+        return '\n'.join(help_lines)
 
 def main():
     import argparse
@@ -360,10 +382,20 @@ def main():
     parser.add_argument("--lyr", default="lyrics.lyr")
     parser.add_argument("--tim", default="timings.tim")
     parser.add_argument("--tass", default="output.tass")
+    parser.add_argument("--help-instructions", action="store_true")
+    parser.add_argument("--log-level", default="ERROR")
     args = parser.parse_args()
     lyr = args.lyr
     tim = args.tim
     tass = args.tass
+
+    _generator = Generator(instructions_folder=instructions_folder)
+
+    logging.basicConfig(level=args.log_level)
+
+    if args.help_instructions:
+        print(_generator.get_instructions_help())
+        return
 
     lyr_str = ""
     with open(lyr, mode='r', encoding="utf-8") as f_lyr:
@@ -372,8 +404,6 @@ def main():
     tim_str = ""
     with open(tim, mode='r', encoding="utf-8") as f_tim:
         tim_str = f_tim.read()
-
-    _generator = Generator(instructions_folder=instructions_folder)
 
     tass_str = _generator.generate(
         lyr_str=lyr_str, tim_str=tim_str,
@@ -384,8 +414,4 @@ def main():
 
 
 if __name__ == '__main__':
-    # dirty hack for local debugging
-    sys.path.insert(0, os.path.dirname(
-        os.path.dirname(
-            os.path.abspath(__file__))))
     main()
