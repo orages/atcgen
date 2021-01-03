@@ -1,2 +1,4 @@
-import generator
-print(generator)
+from new_generator import generator
+
+
+generator.main()
