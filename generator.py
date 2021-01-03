@@ -5,7 +5,6 @@ import logging
 sys.path.insert(0, os.path.dirname(
     os.path.dirname(
         os.path.abspath(__file__))))
-print(sys.path)
 
 try:
     from .event import Event, EventComponentKaraokeSyllab

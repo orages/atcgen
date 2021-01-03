@@ -80,7 +80,6 @@ class StyleInstruction(BaseInstruction):
 
     def parse(self, args_str):
         parsed_args = STYLE_PARSER.parseString(args_str, parseAll=True)
-        print(parsed_args)
         return parsed_args
 
     @staticmethod

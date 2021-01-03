@@ -24,7 +24,6 @@ def escape(text):
     # escape by inserting zero length word separator character
     escapped_text = escapped_text.replace("\n", "\\N")
     escapped_text = escapped_text.replace("{", "\\{")
-    print("ESCAPE", text, "=>", escapped_text)
     return escapped_text
 
 class TassRenderer(BaseRenderer):
