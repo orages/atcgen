@@ -107,6 +107,8 @@ class Generator(object):
         self.instructions = {}
         self.renderers = {}
         self.tass_sections_renderers = []
+        self.load_instructions(self.instructions_folder)
+        self.load_renderers(self.renderers_folder)
 
     def generate(self, lyr_str, tim_str, render_format,
                  instructions_folder=None, renderers_folder=None,
@@ -289,11 +291,7 @@ class Generator(object):
     def current_event(self, value):
         self.context["events"]["current"] = value
 
-    def _compile(self, lyr_str, tim_str, instructions_folder=None,
-                 continue_on_error=False):
-        if instructions_folder is None:
-            instructions_folder = self.instructions_folder
-        self.load_instructions(instructions_folder)
+    def _compile(self, lyr_str, tim_str, continue_on_error=False):
         self.init_context()
         self.context["lyr"]["content"] = lyr_str
         self.context["tim"]["content"] = tim_str
@@ -357,7 +355,6 @@ class Generator(object):
 def main():
     import argparse
     generator_root = os.path.dirname(__file__)
-    print(generator_root)
     instructions_folder = os.path.join(generator_root, "instructions")
     parser = argparse.ArgumentParser()
     parser.add_argument("--lyr", default="lyrics.lyr")
@@ -391,5 +388,4 @@ if __name__ == '__main__':
     sys.path.insert(0, os.path.dirname(
         os.path.dirname(
             os.path.abspath(__file__))))
-    print(sys.path)
     main()
