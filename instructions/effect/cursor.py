@@ -69,12 +69,12 @@ class CursorEffect(Effect):
         context["hooks"]["component.post_append"].append(
             CursorEffect.component_post_append_hook
         )
-        context["hooks"]["event.post_complete"].append(
-            CursorEffect.event_post_complete_hook
+        context["hooks"]["event.pre_complete"].append(
+            CursorEffect.event_pre_complete_hook
         )
 
     @staticmethod
-    def event_post_complete_hook(context, event):
+    def event_pre_complete_hook(context, event):
         extra_data = event.extra_data
         if "cursor_components" not in extra_data:
             return
@@ -84,11 +84,17 @@ class CursorEffect(Effect):
         else:
             return
         new_line_component = EventComponentText('\n', None, context)
+        # add newline without triggering hooks
         event.components.append(new_line_component)
-        event.components.extend(extra_data["cursor_components"])
+        # add cursor components
+        generator = context["_generator"]
+        for cursor_component in extra_data["cursor_components"]:
+            generator.append_component(cursor_component, event=event)
 
     @staticmethod
     def component_post_append_hook(context, event, component):
+        if isinstance(component, (EventComponentEffect)):
+            return
         extra_data = event.extra_data
         cursor_effect_status = context["effects"].get("cursor", True)
         if cursor_effect_status:
