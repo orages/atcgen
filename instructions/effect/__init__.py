@@ -82,15 +82,22 @@ class EffectInstruction(BaseInstruction):
         effect.process(full_line, effect_args, context)
 
 
-class Effect(object):
-    pass
+class Effect(ABC):
 
     @staticmethod
+    @abstractmethod
     def set_up(context):
         pass
 
+    @staticmethod
+    @abstractmethod
     def process(self, full_line, args_str, context):
         pass
+
+    @staticmethod
+    @abstractmethod
+    def help(context):
+        raise NotImplementedError("\"help\" function not defined.")
 
 
 INSTRUCTIONS = {
