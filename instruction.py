@@ -16,9 +16,14 @@ class BaseInstruction(ABC):
 
     @abstractmethod
     def process(self, full_line, args_str, context):
-        pass
+        raise NotImplementedError("\"process\" function not defined.")
 
     @staticmethod
     @abstractmethod
     def set_up(context):
-        pass
+        raise NotImplementedError("\"set_up\" function not defined.")
+
+    @staticmethod
+    @abstractmethod
+    def help(context):
+        raise NotImplementedError("\"help\" function not defined.")
