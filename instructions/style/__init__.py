@@ -5,22 +5,22 @@ from configparser import RawConfigParser
 from new_generator.instruction import BaseInstruction
 from new_generator.style import Style
 from pyparsing import (Optional, Word, Suppress, QuotedString, Group,
-                       ZeroOrMore, alphas, alphanums, CaselessKeyword)
+                       ZeroOrMore, alphanums, printables)
 
 
 _LOGGER = logging.getLogger("generator.instructions.style")
 STYLE_DIR = os.path.dirname(__file__)
 
-STYLE_NAME = Word(alphas).setName("Name") + Optional(
-    Suppress(':') + Word(alphas).setName("Parent")).leaveWhitespace()
+STYLE_NAME = Word(alphanums).setName("Name") + Optional(
+    Suppress(':') + Word(alphanums).setName("Parent")).leaveWhitespace()
 STYLE_ASSIGNATION = (
-    Word(alphas) + (
+    Word(alphanums) + (
         Suppress('=') + (
             QuotedString(
                 '"',
                 escChar='\\') | QuotedString(
                 '\'',
-                escChar='\\') | Word(alphanums))).leaveWhitespace())
+                escChar='\\') | Word(printables))).leaveWhitespace())
 STYLE_PARSER = (Group(STYLE_NAME) + Group(
     ZeroOrMore(Group(STYLE_ASSIGNATION))))
 
@@ -59,6 +59,7 @@ class StyleInstruction(BaseInstruction):
             context = self.context
         styles_available = context["styles"]["available"]
         names, attributes = self.parse(self.args_str)
+        attributes = {a[0]: a[1] for a in attributes}
         style = StyleInstruction.create_style(names, attributes,
                                               styles_available)
         style_name = names[0]
@@ -107,6 +108,8 @@ class StyleInstruction(BaseInstruction):
             if style_parent not in styles_dict:
                 raise StyleDoesNotExistsError(style_parent)
             base_dict.update(styles_dict[style_parent].to_dict())
+            base_dict.pop("extra_data")
+            base_dict.pop("locked")
         base_dict.update(style_dict)
         base_dict.pop("Name", None)
         style = Style(Name=style_name, **base_dict)
