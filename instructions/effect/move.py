@@ -43,6 +43,47 @@ class MoveEffect(Effect):
         self.full_line = ''
         self.args_str = ''
 
+    @staticmethod
+    def help(context):
+        return (
+            "Move an event text across the screen.\n\n"
+
+            "arguments: STATUS X_START Y_START X_END Y_END\n\n"
+
+            "+-----------------+-----------------+-------------------------+\n"
+            "| argument name   | argument type   | description             |\n"
+            "+=================+=================+=========================+\n"
+            "| STATUS          | text            | 'y', 'yes', 't',        |\n"
+            "|                 |                 | 'true',                 |\n"
+            "|                 |                 | 'on' or '1' to enable   |\n"
+            "|                 |                 | the effect, 'n', 'no',  |\n"
+            "|                 |                 | 'f', 'false', 'off',    |\n"
+            "|                 |                 | or '0' to disable it.   |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            "| X_START         | integer         | X coordinate at the     |\n"
+            "|                 |                 | beginning               |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            "| Y_START         | integer         | Y coordinate at the     |\n"
+            "|                 |                 | beginning               |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            "| X_END           | integer         | X coordinate at the     |\n"
+            "|                 |                 | end                     |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            "| Y_END           | integer         | Y coordinate at the     |\n"
+            "|                 |                 | end                     |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            '\n'
+
+
+            "(x=0 ; y=0) correspond to the top left corner.\n"
+            "Reference coordinate of the text depends on its Alignment.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+            "    # move event from top left to bottom right\n"
+            "    %effect move on 0 0 1280 720\n"
+        )
+
     def parse(self, args_str):
         parsed_args = MOVE_ARGS_PARSER.parseString(self.args_str,
                                                    parseAll=True)
@@ -84,8 +125,8 @@ class MoveEffect(Effect):
         x_end = context["effects"]["move"]['x_end']
         y_end = context["effects"]["move"]['y_end']
         move_component = EventComponentEffectMove('', None, context)
-        move_component.set_move(x, y)
+        move_component.set_move(x_start, y_start, x_end, y_end)
         event.components.insert(0, move_component)
 
 
-EFFECTS = {"Move": MoveEffect}
+EFFECTS = {"move": MoveEffect}

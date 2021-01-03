@@ -39,6 +39,38 @@ class PositionEffect(Effect):
         self.full_line = ''
         self.args_str = ''
 
+    @staticmethod
+    def help(context):
+        return (
+            "Force event text position on the screen.\n\n"
+
+            "arguments: STATUS X Y\n\n"
+
+            "+---------------+---------------+-----------------------------+\n"
+            "| argument name | argument type | description                 |\n"
+            "+===============+===============+=============================+\n"
+            "| STATUS        | text          | 'y', 'yes', 't', 'true',    |\n"
+            "|               |               | 'on' or '1' to enable       |\n"
+            "|               |               | the effect, 'n', 'no',      |\n"
+            "|               |               | 'f', 'false', 'off',        |\n"
+            "|               |               | or '0' to disable it.       |\n"
+            "+---------------+---------------+-----------------------------+\n"
+            "| X             | integer       | X coordinate                |\n"
+            "+---------------+---------------+-----------------------------+\n"
+            "| Y             | integer       | Y coordinate                |\n"
+            "+---------------+---------------+-----------------------------+\n"
+            '\n'
+
+
+            "(x=0 ; y=0) correspond to the top left corner.\n"
+            "Reference coordinate of the text depends on its Alignment.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+            "    # display text at 190 110\n"
+            "    %effect position on 190 110\n"
+        )
+
     def parse(self, args_str):
         parsed_args = POSITION_ARGS_PARSER.parseString(self.args_str,
                                                        parseAll=True)

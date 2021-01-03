@@ -56,6 +56,35 @@ class CursorEffect(Effect):
         parsed_args = CURSOR_ARG.parseString(self.args_str, parseAll=True)
         return parsed_args
 
+    @staticmethod
+    def help(context):
+        return (
+            "Add a line of cursors matching the karaoke syllables.\n\n"
+
+            "Active by default.\n\n"
+            "arguments: STATUS\n\n"
+
+            "+-----------------+-----------------+-------------------------+\n"
+            "| argument name   | argument type   | description             |\n"
+            "+=================+=================+=========================+\n"
+            "| STATUS          | text            | 'y', 'yes', 't',        |\n"
+            "|                 |                 | 'true',                 |\n"
+            "|                 |                 | 'on' or '1' to enable   |\n"
+            "|                 |                 | the effect, 'n', 'no',  |\n"
+            "|                 |                 | 'f', 'false', 'off',    |\n"
+            "|                 |                 | or '0' to disable it.   |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            '\n'
+            "If the cursor is disabled or (re-enabled) in the middle of an "
+            "event, place-holder components are inserted to avoid "
+            "misalignment of syllables.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+            "    # disable the cursor\n"
+            "    %effect cursor off\n"
+        )
+
     def process(self, full_line, args_str, context):
         self.full_line = full_line
         self.args_str = args_str

@@ -99,6 +99,95 @@ class StyleInstruction(BaseInstruction):
             StyleInstruction.event_post_create_hook)
 
     @staticmethod
+    def help(context):
+        return (
+            "Declare and/or activate styles.\n\n"
+
+            "arguments: NAME_AND_PARENT ATTRIBUTES...\n\n"
+
+
+
+            "+-----------------+---------------+---------------------------+\n"
+            "| argument name   | argument type | description               |\n"
+            "+=================+===============+===========================+\n"
+            "| NAME_AND_PARENT | text                           | Name of  |\n"
+            "|                 |                                | the style|\n"
+            "|                 |                                | & name   |\n"
+            "|                 |                                | of its   |\n"
+            "|                 |                                | parent   |\n"
+            "|                 |                                | (if any) |\n"
+            "|                 |                                | separated|\n"
+            "|                 |                                | by a     |\n"
+            "|                 |                                | colon    |\n"
+            "|                 |                                | (':')    |\n"
+            "+-----------------+--------------------------------+----------+\n"
+            "| ATTRIBUTES      |zero or more groups of text     |A sequence|\n"
+            "|                 |formatted like                  |of        |\n"
+            "|                 |'ATTRIBUTE_NAME=ATTRIBUTE_VALUE'|attributes|\n"
+            "|                 |ATTRIBUTE_VALUE can be a        |to define |\n"
+            "|                 |quoted text if it has           |for the   |\n"
+            "|                 |to contain white spaces         |newly     |\n"
+            "|                 |                                |created   |\n"
+            "|                 |                                |style.    |\n"
+            "|                 |                                |If empty  |\n"
+            "|                 |                                |and the   |\n"
+            "|                 |                                |style name|\n"
+            "|                 |                                |already   |\n"
+            "|                 |                                |exists,   |\n"
+            "|                 |                                |set the   |\n"
+            "|                 |                                |style     |\n"
+            "|                 |                                |as the    |\n"
+            "|                 |                                |active    |\n"
+            "|                 |                                |style.    |\n"
+            "+-----------------+--------------------------------+----------+\n"
+            '\n'
+
+
+            "A \"parent\" is a styles which the newly created style is "
+            "derived from the newly created style attributes have the same "
+            "values as the ones in the parent, except for the attributes "
+            "redefined in the attribute sequence of the child declaration.\n\n"
+            "Attributes list:\n"
+            "  - Fontname\n"
+            "  - Fontsize\n"
+            "  - PrimaryColour\n"
+            "  - SecondaryColour\n"
+            "  - KaraokeColour\n"
+            "  - OutlineColour\n"
+            "  - BackColour\n"
+            "  - Bold\n"
+            "  - Italic\n"
+            "  - Underline\n"
+            "  - StrikeOut\n"
+            "  - ScaleX\n"
+            "  - ScaleY\n"
+            "  - Spacing\n"
+            "  - Angle\n"
+            "  - BorderStyle\n"
+            "  - Outline\n"
+            "  - Shadow\n"
+            "  - Alignment\n"
+            "  - MarginL\n"
+            "  - MarginR\n"
+            "  - MarginV\n"
+            "  - Encoding\n\n"
+
+            "The \"Styles.ini\" file stored in the generator contains "
+            "some pre-declared styles.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+
+            "    # declare a style named \"Main\"\n"
+            "    %style Main Alignment=8 PrimaryColour=&H0003FF31 "
+            "SecondaryColour=&H002522FF KaraokeColour=&H0040FFEC\n"
+            "    # declare a style derived from \"Main\" named \"Choir\"\n"
+            "    # with diffrent colours and Alignment\n"
+            "    %style Choir:Main Alignment=2 PrimaryColour=&H00310FF3 "
+            "SecondaryColour=&H002FF225 KaraokeColour=&H00ECFF40\n"
+        )
+
+    @staticmethod
     def create_style(names, attributes, styles_dict):
         style_name = names[0]
         style_parent = names[1] if len(names) > 1 else ''

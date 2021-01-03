@@ -1,5 +1,7 @@
 import logging
 import os
+from abc import ABC, abstractmethod
+
 from new_generator.instruction import BaseInstruction
 
 from pyparsing import (Suppress, QuotedString, CharsNotIn, restOfLine)
@@ -17,6 +19,10 @@ EFFECT_NAME = (
 EFFECT_ARGS = restOfLine.setName("args")
 
 EFFECT_PARSER = (EFFECT_NAME + Suppress(' ').leaveWhitespace() + EFFECT_ARGS)
+
+
+class EffectException(Exception):
+    pass
 
 
 class EffectInstruction(BaseInstruction):
@@ -66,6 +72,39 @@ class EffectInstruction(BaseInstruction):
             already_processed.add(effect_id)
             effect.set_up(context)
         context["effects"]["_available"] = available_effects
+
+    @staticmethod
+    def help(context):
+        available_effects = {}
+
+        _available = context["effects"]["_available"]
+        for effect_name, effect_class in _available.items():
+            effect_id = id(effect_class)
+            if effect_id not in available_effects:
+                available_effects[effect_id] = {
+                    "class": effect_class,
+                    "aliases": [effect_name],
+                }
+            else:
+                available_effects[effect_id]["aliases"].append(effect_name)
+
+        help_lines = [
+            "Manage event-level effects\n",
+            "available_effects: ",
+            '',
+        ]
+
+        for effect_id, effect_data in available_effects.items():
+            headline = ', '.join(effect_data["aliases"])
+            help_lines.append(headline)
+            help_lines.append('-' * len(headline))
+            try:
+                desc = effect_data["class"].help(context) or '/'
+            except Exception as exc:
+                raise EffectException(headline) from exc
+            help_lines.append(desc)
+
+        return '\n'.join(help_lines)
 
     def parse(self, args_str):
         parsed_args = EFFECT_PARSER.parseString(self.args_str, parseAll=True)

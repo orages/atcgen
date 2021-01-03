@@ -62,6 +62,35 @@ class InfoInstruction(BaseInstruction):
         context_info["default"] = info_dict
 
     @staticmethod
+    def help(context):
+        return (
+            "Declare subtitle file global information.\n\n"
+
+            "arguments: NAME VALUE\n\n"
+
+            "+---------------+---------------+-----------------------------+\n"
+            "| argument name | argument type | description                 |\n"
+            "+===============+===============+=============================+\n"
+            "| NAME          | text          | Name of the info variable   |\n"
+            "|               |               | to declare                  |\n"
+            "+---------------+---------------+-----------------------------+\n"
+            "| VALUE         | text          | Value of the declared       |\n"
+            "|               |               | variable                    |\n"
+            "+---------------+---------------+-----------------------------+\n"
+            '\n'
+
+            "The \"script_info.ini\" file stored in the generator contains"
+            "some pre-declared informations.\n"
+            "/!\\ script infos act on the whole subtitle file no matter his"
+            "position in the lyr.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+            "    # disable ligatures\n"
+            "    %info Ligatures 0\n"
+        )
+
+    @staticmethod
     def get_info_from_ini(ini_path):
         parser = RawConfigParser()
         parser.optionxform = str  # keep leading uppercases

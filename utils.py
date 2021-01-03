@@ -34,7 +34,7 @@ def RGBtoABGR(string):
         g = string[2:4]
         b = string[4:]
     else:
-        raise RuntimeError("color string should be of length 6 or 8.")
+        raise RuntimeError("colour string should be of length 6 or 8.")
     return '{}{}{}{}'.format(a, b, g, r)
 
 

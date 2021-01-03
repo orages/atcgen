@@ -40,6 +40,56 @@ class FadingEffect(Effect):
         self.full_line = ''
         self.args_str = ''
 
+    @staticmethod
+    def help(context):
+        return (
+            "Add a fade in and fade out effect to the events.\n\n"
+
+            "Active by default with preset:\n"
+            "  - fade in duration: 750ms\n"
+            "  - fade out duration: 500ms\n"
+            "  - fade in delay: -100cs\n"
+            "  - fade out delay: 50cs\n\n"
+
+            "arguments: FADEIN_DURATION FADEOUT_DURATION "
+            "FADEIN_DELAY FADEOUT_DELAY\n\n"
+
+            "+------------------+-----------------+------------------------+\n"
+            "| argument name    | argument type   | description            |\n"
+            "+==================+=================+========================+\n"
+            "| FADEIN_DURATION  | integer (in ms) | Duration of the fade   |\n"
+            "|                  |                 | in effect              |\n"
+            "+------------------+-----------------+------------------------+\n"
+            "| FADEOUT_DURATION | integer (in ms) | Duration of the fade   |\n"
+            "|                  |                 | in effect              |\n"
+            "+------------------+-----------------+------------------------+\n"
+            "| FADEIN_DELAY     | integer (in ms) | Shift the beginning    |\n"
+            "|                  |                 | of the event to avoid  |\n"
+            "|                  |                 | overlapping fading     |\n"
+            "|                  |                 | effect and sung        |\n"
+            "|                  |                 | syllables.             |\n"
+            "+------------------+-----------------+------------------------+\n"
+            "| FADEOUT_DELAY    | integer (in ms) | Shift the end of       |\n"
+            "|                  |                 | the event to avoid     |\n"
+            "|                  |                 | overlapping fading     |\n"
+            "|                  |                 | effect and             |\n"
+            "|                  |                 | sung syllables.        |\n"
+            "+------------------+-----------------+------------------------+\n"
+            '\n'
+
+            "If the cursor is disabled or (re-enabled) in the middle of an "
+            "event, place-holder components are inserted to avoid "
+            "misalignment of syllables.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+            "    # at apparition text fade in for 0.75s\n"
+            "    # then stays still for 0.25s\n"
+            "    # then is sung\n"
+            "    # then disappear in a fade out during 0.5s\n"
+            "    %effect passing 750 500 -100 50\n"
+        )
+
     def parse(self, args_str):
         parsed_args = FADING_ARGS_PARSER.parseString(self.args_str,
                                                      parseAll=True)

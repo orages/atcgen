@@ -24,6 +24,37 @@ class CreditInstruction(BaseInstruction):
         super(BaseInstruction, self).__init__()
 
     @staticmethod
+    def help(context):
+        return (
+            "Simple credit event generation.\n\n"
+
+            "arguments: START END TEXT\n\n"
+
+            "+-----------------+-----------------+-------------------------+\n"
+            "| argument name   | argument type   | description             |\n"
+            "+=================+=================+=========================+\n"
+            "| START           | timestamp in cs | begining of the event   |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            "| END             | timestamp in cs | end of the event        |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            "| TEXT            | text            | text to display         |\n"
+            "+-----------------+-----------------+-------------------------+\n"
+            '\n'
+
+            "Create an event with the \"Credit\" style timed between START AND"
+            "END.\n"
+            "A default \"Credit\" style is created if none exists"
+            " when the line is processed).\n"
+            "If the \"fading\" effect is available, a ``fading 500 500`` "
+            "is included.\n\n"
+
+            "Examples:\n\n"
+            "::\n\n"
+            "    # add a credit line at the begining of the video\n"
+            "    %credit 0 400 [Serie - Type]\n"
+        )
+
+    @staticmethod
     def set_up(context):
         if "Credit" not in context["styles"]["available"]:
             context["styles"]["available"]["Credit"] = Style(
