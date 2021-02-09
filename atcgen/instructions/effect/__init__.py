@@ -2,7 +2,7 @@ import logging
 import os
 from abc import ABC, abstractmethod
 
-from new_generator.instruction import BaseInstruction
+from atcgen.instruction import BaseInstruction
 
 from pyparsing import (Suppress, QuotedString, CharsNotIn, restOfLine)
 
@@ -35,18 +35,18 @@ class EffectInstruction(BaseInstruction):
         self.available_effects = EffectInstruction.gather_effects()
 
     @staticmethod
-    def gather_effects(folder=None):
-        if folder is None:
-            folder = EFFECTS_DIR
-        effects_folder = os.path.dirname(__file__)
+    def gather_effects(directory=None):
+        if directory is None:
+            directory = EFFECTS_DIR
+        effects_directory = os.path.dirname(__file__)
         name_prefix = __name__
         effects = {}
-        for finder, name, ispkg in iter_modules([effects_folder]):
+        for finder, name, ispkg in iter_modules([effects_directory]):
             _LOGGER.debug("%s", dict(finder=finder, name=name, ispkg=ispkg))
             module_name = '.'.join((name_prefix, name))
             spec = finder.find_spec(
                 module_name,
-                os.path.join(folder, name))
+                os.path.join(directory, name))
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             try:
@@ -90,7 +90,7 @@ class EffectInstruction(BaseInstruction):
 
         help_lines = [
             "Manage event-level effects\n",
-            "available_effects: ",
+            "available_effects:",
             '',
         ]
 

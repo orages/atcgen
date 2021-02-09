@@ -1,29 +1,18 @@
+"""
+atcgen Generator
+"""
+
 import os
 import sys
 import logging
-
-sys.path.insert(0, os.path.dirname(
-    os.path.dirname(
-        os.path.abspath(__file__))))
-
-try:
-    from .event import Event, EventComponentKaraokeSyllab
-    from .style import Style
-    from .parsers import (INSTRUCTION_PARSER, LYRICS_PARSER,
-                          TIM_PARSER, SOFT_BREAK)
-    from .utils import ExceptionShield
-
-
-except ImportError as e:
-    from event import Event, EventComponentKaraokeSyllab
-    from style import Style
-    from parsers import (INSTRUCTION_PARSER, LYRICS_PARSER,
-                         TIM_PARSER, SOFT_BREAK)
-    from utils import ExceptionShield
-
-
-from pkgutil import iter_modules
 import importlib
+from pkgutil import iter_modules
+
+from atcgen.event import Event, EventComponentKaraokeSyllable
+from atcgen.style import Style
+from atcgen.parsers import (INSTRUCTION_PARSER, LYRICS_PARSER,
+                            TIM_PARSER, SOFT_BREAK)
+from atcgen.utils import ExceptionShield
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -84,18 +73,18 @@ def TimEntryGenerator(tim_parser):
 
 class Generator(object):
 
-    def __init__(self, instructions_folder=None, renderers_folder=None):
+    def __init__(self, instruction_directory=None, renderers_directory=None):
         super(Generator, self).__init__()
-        self.instructions_folder = instructions_folder
-        self.renderers_folder = renderers_folder
+        self.instruction_directory = instruction_directory
+        self.renderers_directory = renderers_directory
         main_dir = os.path.dirname(__file__)
-        if self.instructions_folder is None:
-            self.instructions_folder = os.path.join(
+        if self.instruction_directory is None:
+            self.instruction_directory = os.path.join(
                 main_dir,
                 "instructions",
             )
-        if self.renderers_folder is None:
-            self.renderers_folder = os.path.join(
+        if self.renderers_directory is None:
+            self.renderers_directory = os.path.join(
                 main_dir,
                 "renderers",
             )
@@ -106,19 +95,18 @@ class Generator(object):
         self.tim_parser_class = TimParser
         self.instructions = {}
         self.renderers = {}
-        self.tass_sections_renderers = []
-        self.load_instructions(self.instructions_folder)
-        self.load_renderers(self.renderers_folder)
+        self.load_instructions(self.instruction_directory)
+        self.load_renderers(self.renderers_directory)
 
     def generate(self, lyr_str, tim_str, render_format,
-                 instructions_folder=None, renderers_folder=None,
+                 instruction_directory=None, renderers_directory=None,
                  continue_on_error=False):
-        if instructions_folder is None:
-            instructions_folder = self.instructions_folder
-        self.load_instructions(instructions_folder)
-        if renderers_folder is None:
-            renderers_folder = self.renderers_folder
-        self.load_renderers(renderers_folder)
+        if instruction_directory is None:
+            instruction_directory = self.instruction_directory
+        self.load_instructions(instruction_directory)
+        if renderers_directory is None:
+            renderers_directory = self.renderers_directory
+        self.load_renderers(renderers_directory)
         self._compile(lyr_str, tim_str, continue_on_error=continue_on_error)
         renderer = self.renderers[render_format]()
         output = renderer.render(self.context)
@@ -155,8 +143,8 @@ class Generator(object):
             "events": {
                 "current": None,
                 "event_class": Event,
-                "event_component_karaoke_syllab_class": (
-                    EventComponentKaraokeSyllab
+                "component_syllable_class": (
+                    EventComponentKaraokeSyllable
                 ),
                 "processed": [],
             },
@@ -166,6 +154,8 @@ class Generator(object):
                 "event.post_create": [],
                 "event.pre_complete": [],
                 "event.post_complete": [],
+                "syllable_component.pre_create": [],
+                "syllable_component.post_create": [],
                 "component.pre_create": [],
                 "component.post_create": [],
                 "component.pre_append": [],
@@ -189,15 +179,15 @@ class Generator(object):
             with ExceptionShield():
                 hook(self.context)
 
-    def load_instructions(self, folder, update=False):
+    def load_instructions(self, directory, update=False):
         if not update:
             self.instructions = {}
-        for finder, name, ispkg  in iter_modules([folder]):
+        for finder, name, ispkg in iter_modules([directory]):
             _LOGGER.debug("%s", dict(finder=finder, name=name, ispkg=ispkg))
-            module_name = '.'.join(("new_generator", "instructions", name))
+            module_name = '.'.join(("atcgen", "instructions", name))
             spec = finder.find_spec(
                 module_name,
-                os.path.join(folder, name))
+                os.path.join(directory, name))
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             try:
@@ -212,15 +202,15 @@ class Generator(object):
             except Exception as e:
                 _LOGGER.warning("Fail to load instructions '%s': %s", name, e)
 
-    def load_renderers(self, folder, update=False):
+    def load_renderers(self, directory, update=False):
         if not update:
             self.renderers = {}
-        for finder, name, ispkg  in iter_modules([folder]):
+        for finder, name, ispkg in iter_modules([directory]):
             _LOGGER.debug("%s", dict(finder=finder, name=name, ispkg=ispkg))
-            module_name = '.'.join(("new_generator", "renderers", name))
+            module_name = '.'.join(("atcgen", "renderers", name))
             spec = finder.find_spec(
                 module_name,
-                os.path.join(folder, name))
+                os.path.join(directory, name))
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
             try:
@@ -270,6 +260,20 @@ class Generator(object):
             with ExceptionShield(to_silence=()):
                 hook(self.context, event)
         return event
+
+    def create_component(self, syllable_text, tim_entry,
+                         component_class=None):
+        if component_class is None:
+            component_class = self.context["events"][
+                "component_syllable_class"]
+        for hook in self.context["hooks"]["component.pre_create"]:
+            with ExceptionShield():
+                hook(self.context)
+        component = component_class(syllable_text, tim_entry)
+        for hook in self.context["hooks"]["component.post_create"]:
+            with ExceptionShield():
+                hook(self.context, component)
+        return component
 
     def append_component(self, component, event=None):
         if event is None:
@@ -324,14 +328,13 @@ class Generator(object):
                     context["styles"]["used"].add(context["styles"]["active"])
                     context["styles"]["used"].add(context["styles"]["active"])
                     _LOGGER.debug("parsed_lyrics: %s", parsed_lyrics)
-                    for syllab_text, tim_entry in zip(parsed_lyrics,
-                                                      tim_generator):
-                        _LOGGER.debug("syllab: %s (%s)",
-                                      syllab_text, tim_entry)
-                        component = self.context["events"][
-                            "event_component_karaoke_syllab_class"](
-                            syllab_text,
-                            tim_entry, context)
+                    for syllable_text, tim_entry in zip(parsed_lyrics,
+                                                        tim_generator):
+                        _LOGGER.debug("syllable: %s (%s)",
+                                      syllable_text, tim_entry)
+                        component = self.create_component(
+                            syllable_text,
+                            tim_entry)
                         self.append_component(component)
 
                     if not soft_break:
@@ -374,10 +377,11 @@ class Generator(object):
             help_lines.append(desc)
         return '\n'.join(help_lines)
 
+
 def main():
     import argparse
     generator_root = os.path.dirname(__file__)
-    instructions_folder = os.path.join(generator_root, "instructions")
+    instruction_directory = os.path.join(generator_root, "instructions")
     parser = argparse.ArgumentParser()
     parser.add_argument("--lyr", default="lyrics.lyr")
     parser.add_argument("--tim", default="timings.tim")
@@ -389,7 +393,7 @@ def main():
     tim = args.tim
     tass = args.tass
 
-    _generator = Generator(instructions_folder=instructions_folder)
+    _generator = Generator(instruction_directory=instruction_directory)
 
     logging.basicConfig(level=args.log_level)
 
@@ -413,5 +417,9 @@ def main():
         f_tass.write(tass_str)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     print("__name__ =", __name__)
+#     sys.path.insert(0, os.path.dirname(
+#         os.path.dirname(
+#             os.path.abspath(__file__))))
+#     main()

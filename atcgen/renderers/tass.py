@@ -1,8 +1,5 @@
 from itertools import chain
-from new_generator.renderer import BaseRenderer
-from new_generator.event import (EventComponentText,
-                                 EventComponentKaraokeSyllab,
-                                 EventComponentEffect)
+from atcgen.renderer import BaseRenderer
 
 
 def timestamp_to_time(ts):

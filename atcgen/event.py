@@ -32,10 +32,10 @@ class EventComponentEffect(EventComponent):
     pass
 
 
-class EventComponentKaraokeSyllab(EventComponent):
+class EventComponentKaraokeSyllable(EventComponent):
 
     def __init__(self, text='', tim_entry=None, context=None):
-        super(EventComponentKaraokeSyllab, self).__init__(
+        super(EventComponentKaraokeSyllable, self).__init__(
             text=text, tim_entry=tim_entry, context=context)
         self.karaoke_type = "kt"
         if context:

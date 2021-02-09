@@ -1,10 +1,10 @@
 import logging
 from itertools import chain
 
-from new_generator.instruction import BaseInstruction
-from new_generator.generator import TimEntry
-from new_generator.event import EventComponentText
-from new_generator.style import Style
+from atcgen.instruction import BaseInstruction
+from atcgen.generator import TimEntry
+from atcgen.event import EventComponentText
+from atcgen.style import Style
 
 from pyparsing import (Word, hexnums, Group, Optional, Empty)
 
@@ -42,7 +42,7 @@ class ColourInstruction(BaseInstruction):
             "|                 | hexadecimal     |                         |\n"
             "|                 | sequences       |                         |\n"
             "+-----------------+-----------------+-------------------------+\n"
-            "| COLOR_AFTER     | RGB or RGBA     | PrimaryColour           |\n"
+            "| COLOUR_AFTER    | RGB or RGBA     | PrimaryColour           |\n"
             "|                 | hexadecimal     |                         |\n"
             "|                 | sequences       |                         |\n"
             "+-----------------+-----------------+-------------------------+\n"

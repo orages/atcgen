@@ -1,9 +1,9 @@
 import logging
 from collections import namedtuple
-from new_generator.instruction import BaseInstruction
-from new_generator.generator import TimEntry
-from new_generator.event import EventComponentText, EventEffect
-from new_generator.style import Style
+from atcgen.instruction import BaseInstruction
+from atcgen.generator import TimEntry
+from atcgen.event import EventComponentText, EventEffect
+from atcgen.style import Style
 from distutils.util import strtobool
 
 from ..effect import Effect

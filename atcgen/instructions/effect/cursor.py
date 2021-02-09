@@ -1,6 +1,6 @@
 import copy
-from new_generator.instructions.effect import Effect
-from new_generator.event import EventComponentEffect, EventComponentText
+from atcgen.instructions.effect import Effect
+from atcgen.event import EventComponentEffect, EventComponentText
 
 from pyparsing import (Word, alphanums)
 from distutils.util import strtobool

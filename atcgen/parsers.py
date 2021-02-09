@@ -1,21 +1,6 @@
-from pyparsing import (CaselessKeyword, CharsNotIn, Combine, Empty, Forward, Group,
-                       Keyword, Literal, OneOrMore, Optional, ParseException,
-                       QuotedString, Regex, Suppress, Word, ZeroOrMore,
-                       alphanums, alphas, nums, printables, restOfLine)
-
-class LyrInstructionAlreadyExistsError(Exception):
-    pass
-
-
-class LyrInstructionNotFoundError(Exception):
-    pass
-
-
-def LyrInstructionParserFactory(name, arguments_parser=None):
-    instruction_parser = LyrInstruction(name)
-    if arguments_parser is not None:
-        instruction_parser = instruction_parser + arguments_parser
-    return instruction_parser
+from pyparsing import (CaselessKeyword, CharsNotIn, Combine, Group, Keyword,
+                       Literal, OneOrMore, Optional, Regex, Suppress, Word,
+                       ZeroOrMore, alphanums, nums, restOfLine)
 
 
 def LyrInstruction(name, caseless=True):
@@ -28,9 +13,7 @@ SOFT_BREAK = type("SOFT_BREAK",
                   {"__repr__": lambda self: "<SOFT_BREAK>"})()
 
 
-INSTRUCTION_PARSER = (Suppress('%') +
-                      Word(alphanums) +
-                      restOfLine)
+INSTRUCTION_PARSER = Suppress('%') + Word(alphanums) + restOfLine
 
 
 CREDIT_TIMES = Word(nums) + Word(nums)
@@ -42,11 +25,11 @@ EFFECT_PARSER = LyrInstruction("effect") + Word(alphanums) + restOfLine
 ESCAPE = Suppress(Literal("\\")) + Word("\\)]:", exact=1)
 TEXT = Combine(ZeroOrMore(ESCAPE ^ Regex("[^\\]\\\\:]")))
 
-syllab = CharsNotIn("&\\")
+syllable = CharsNotIn("&\\")
 
 split_word = Suppress('&') + ZeroOrMore(
-    syllab + ZeroOrMore(Suppress('\\') + (
-                        (Literal('\\') | Literal('&') | syllab)))
+    syllable + ZeroOrMore(Suppress('\\') + (
+                          (Literal('\\') | Literal('&') | syllable)))
 ).setParseAction(lambda t: ''.join(t))
 
 LYRICS_PARSER = ZeroOrMore(split_word) + Optional(

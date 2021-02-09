@@ -1,5 +1,5 @@
-from new_generator.instructions.effect import Effect
-from new_generator.event import EventComponentEffect
+from atcgen.instructions.effect import Effect
+from atcgen.event import EventComponentEffect
 
 from pyparsing import (Combine, Optional, Word, alphanums, nums, tokenMap)
 from distutils.util import strtobool

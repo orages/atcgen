@@ -2,8 +2,8 @@ import logging
 import os
 import glob
 from configparser import RawConfigParser
-from new_generator.instruction import BaseInstruction
-from new_generator.style import Style
+from atcgen.instruction import BaseInstruction
+from atcgen.style import Style
 from pyparsing import (Optional, Word, Suppress, QuotedString, Group,
                        ZeroOrMore, alphanums, printables)
 
@@ -106,39 +106,39 @@ class StyleInstruction(BaseInstruction):
 
 
 
-            "+-----------------+---------------+---------------------------+\n"
-            "| argument name   | argument type | description               |\n"
-            "+=================+===============+===========================+\n"
-            "| NAME_AND_PARENT | text                           | Name of  |\n"
-            "|                 |                                | the style|\n"
-            "|                 |                                | & name   |\n"
-            "|                 |                                | of its   |\n"
-            "|                 |                                | parent   |\n"
-            "|                 |                                | (if any) |\n"
-            "|                 |                                | separated|\n"
-            "|                 |                                | by a     |\n"
-            "|                 |                                | colon    |\n"
-            "|                 |                                | (':')    |\n"
-            "+-----------------+--------------------------------+----------+\n"
-            "| ATTRIBUTES      |zero or more groups of text     |A sequence|\n"
-            "|                 |formatted like                  |of        |\n"
-            "|                 |'ATTRIBUTE_NAME=ATTRIBUTE_VALUE'|attributes|\n"
-            "|                 |ATTRIBUTE_VALUE can be a        |to define |\n"
-            "|                 |quoted text if it has           |for the   |\n"
-            "|                 |to contain white spaces         |newly     |\n"
-            "|                 |                                |created   |\n"
-            "|                 |                                |style.    |\n"
-            "|                 |                                |If empty  |\n"
-            "|                 |                                |and the   |\n"
-            "|                 |                                |style name|\n"
-            "|                 |                                |already   |\n"
-            "|                 |                                |exists,   |\n"
-            "|                 |                                |set the   |\n"
-            "|                 |                                |style     |\n"
-            "|                 |                                |as the    |\n"
-            "|                 |                                |active    |\n"
-            "|                 |                                |style.    |\n"
-            "+-----------------+--------------------------------+----------+\n"
+            "+----------------+--------------------------------+-----------+\n"
+            "| argument name  | argument type                  |description|\n"
+            "+================+================================+===========+\n"
+            "| NAME_AND_PARENT| text                           |  Name of  |\n"
+            "|                |                                |  the style|\n"
+            "|                |                                |  & name   |\n"
+            "|                |                                |  of its   |\n"
+            "|                |                                |  parent   |\n"
+            "|                |                                |  (if any) |\n"
+            "|                |                                |  separated|\n"
+            "|                |                                |  by a     |\n"
+            "|                |                                |  colon    |\n"
+            "|                |                                |  (':')    |\n"
+            "+----------------+--------------------------------+-----------+\n"
+            "| ATTRIBUTES     |zero or more groups of text     | A sequence|\n"
+            "|                |formatted like                  | of        |\n"
+            "|                |'ATTRIBUTE_NAME=ATTRIBUTE_VALUE'| attributes|\n"
+            "|                |ATTRIBUTE_VALUE can be a        | to define |\n"
+            "|                |quoted text if it has           | for the   |\n"
+            "|                |to contain white spaces         | newly     |\n"
+            "|                |                                | created   |\n"
+            "|                |                                | style.    |\n"
+            "|                |                                | If empty  |\n"
+            "|                |                                | and the   |\n"
+            "|                |                                | style name|\n"
+            "|                |                                | already   |\n"
+            "|                |                                | exists,   |\n"
+            "|                |                                | set the   |\n"
+            "|                |                                | style     |\n"
+            "|                |                                | as the    |\n"
+            "|                |                                | active    |\n"
+            "|                |                                | style.    |\n"
+            "+----------------+--------------------------------+-----------+\n"
             '\n'
 
 

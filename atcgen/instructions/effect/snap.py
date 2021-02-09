@@ -1,4 +1,4 @@
-from new_generator.instructions.effect import Effect
+from atcgen.instructions.effect import Effect
 
 from pyparsing import (Combine, Word, nums, tokenMap)
 

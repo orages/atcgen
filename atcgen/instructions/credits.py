@@ -1,8 +1,8 @@
 import logging
-from new_generator.instruction import BaseInstruction
-from new_generator.generator import TimEntry
-from new_generator.event import EventComponentText
-from new_generator.style import Style
+from atcgen.instruction import BaseInstruction
+from atcgen.generator import TimEntry
+from atcgen.event import EventComponentText
+from atcgen.style import Style
 
 from pyparsing import (Word, nums, tokenMap, restOfLine)
 
@@ -101,7 +101,7 @@ class CreditInstruction(BaseInstruction):
 
         # check fading effect availability
         try:
-            from new_generator.instructions.effect.fading import (
+            from atcgen.instructions.effect.fading import (
                 EventComponentEffectFading)
             fading_component_class = EventComponentEffectFading
             fading_effect_available = True

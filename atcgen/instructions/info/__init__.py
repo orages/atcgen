@@ -2,8 +2,8 @@ import logging
 import os
 import glob
 from configparser import RawConfigParser
-from new_generator.instruction import BaseInstruction, InstructionError
-from new_generator.style import Style
+from atcgen.instruction import BaseInstruction, InstructionError
+from atcgen.style import Style
 
 from pyparsing import (Suppress, QuotedString, CharsNotIn, restOfLine)
 
