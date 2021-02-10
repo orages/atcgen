@@ -415,11 +415,3 @@ def main():
 
     with open(tass, mode='w+', encoding="utf-8") as f_tass:
         f_tass.write(tass_str)
-
-
-# if __name__ == '__main__':
-#     print("__name__ =", __name__)
-#     sys.path.insert(0, os.path.dirname(
-#         os.path.dirname(
-#             os.path.abspath(__file__))))
-#     main()
