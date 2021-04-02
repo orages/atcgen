@@ -9,7 +9,7 @@ from atcgen.style import Style
 from pyparsing import (Word, hexnums, Group, Optional, Empty)
 
 
-colourS_PARSER = ((
+COLOURS_PARSER = ((
     Group(Word(hexnums, exact=2).leaveWhitespace() * 4
           ) | Group(Word(hexnums, exact=2).leaveWhitespace() * 3)
 ) + Optional(Empty())) * 3
@@ -62,7 +62,7 @@ class ColourInstruction(BaseInstruction):
         pass
 
     def parse(self, args_str):
-        parsed_args = colourS_PARSER.parseString(args_str, parseAll=True)
+        parsed_args = COLOURS_PARSER.parseString(args_str, parseAll=True)
         return parsed_args
 
     def process(self, full_line, args_str, context):
