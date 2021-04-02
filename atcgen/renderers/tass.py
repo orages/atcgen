@@ -58,7 +58,7 @@ class TassRenderer(BaseRenderer):
         format_header = "Format: " + self.styles_format.translate(
             self.remove_braces_trans)
         lines.append(format_header)
-        for style_name in used:
+        for style_name in sorted(used):
             style = available[style_name]
             lines.append("Style: {}".format(
                 self.styles_format.format(**style.to_dict())
