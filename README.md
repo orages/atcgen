@@ -6,11 +6,11 @@ Description
 -----------
 
 
-###Goal
+### Goal
 Easy to use & customize toyunda generator, compile .tim & .lyr files to .tass files.
 
 
-###features
+### features
 
 input lyrics formats:
  - .lyr
@@ -52,6 +52,7 @@ sphinx-build doc doc_build
 
 Usage
 -----
+```
 usage: atcgen [-h] [--lyr LYR] [--tim TIM] [--tass TASS] [--help-instructions] [--log-level LOG_LEVEL]
 
 optional arguments:
@@ -61,3 +62,4 @@ optional arguments:
   --tass TASS
   --help-instructions
   --log-level LOG_LEVEL
+```
