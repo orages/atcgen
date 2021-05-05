@@ -1,3 +1,13 @@
+
+
+class StyleError(Exception):
+    pass
+
+
+class StyleLockedError(StyleError):
+    pass
+
+
 class Style(object):
 
     __slots__ = (
@@ -69,7 +79,7 @@ class Style(object):
     def __setattr__(self, attribute, value):
         try:
             if self.locked:
-                raise AttributeError("Style is read-only.")
+                raise StyleLockedError("This Style is locked (read-only).")
         except AttributeError:
             pass
         super().__setattr__(attribute, value)
