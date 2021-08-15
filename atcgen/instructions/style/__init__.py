@@ -58,12 +58,13 @@ class StyleInstruction(BaseInstruction):
         if context is None:
             context = self.context
         styles_available = context["styles"]["available"]
+        styles_used = context["styles"]["used"]
         names, attributes = self.parse(self.args_str)
         attributes = {a[0]: a[1] for a in attributes}
         style = StyleInstruction.create_style(names, attributes,
                                               styles_available)
         style_name = names[0]
-        if style_name in styles_available:
+        if style_name in styles_used:
             raise StyleAlreadyExistsError(style_name)
         styles_available[style_name] = style
 
