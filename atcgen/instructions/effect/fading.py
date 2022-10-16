@@ -45,7 +45,7 @@ class FadingEffect(Effect):
         return (
             "Add a fade in and fade out effect to the events.\n\n"
 
-            "Active by default with preset:\n"
+            "Active by default with presets:\n"
             "  - fade in duration: 750ms\n"
             "  - fade out duration: 500ms\n"
             "  - fade in delay: -100cs\n"
@@ -63,13 +63,13 @@ class FadingEffect(Effect):
             "| FADEOUT_DURATION | integer (in ms) | Duration of the fade   |\n"
             "|                  |                 | in effect              |\n"
             "+------------------+-----------------+------------------------+\n"
-            "| FADEIN_DELAY     | integer (in ms) | Shift the beginning    |\n"
+            "| FADEIN_DELAY     | integer (in cs) | Shift the beginning    |\n"
             "|                  |                 | of the event to avoid  |\n"
             "|                  |                 | overlapping fading     |\n"
             "|                  |                 | effect and sung        |\n"
             "|                  |                 | syllables.             |\n"
             "+------------------+-----------------+------------------------+\n"
-            "| FADEOUT_DELAY    | integer (in ms) | Shift the end of       |\n"
+            "| FADEOUT_DELAY    | integer (in cs) | Shift the end of       |\n"
             "|                  |                 | the event to avoid     |\n"
             "|                  |                 | overlapping fading     |\n"
             "|                  |                 | effect and             |\n"
@@ -87,7 +87,7 @@ class FadingEffect(Effect):
             "    # then stays still for 0.25s\n"
             "    # then is sung\n"
             "    # then disappear in a fade out during 0.5s\n"
-            "    %effect passing 750 500 -100 50\n"
+            "    %effect fading 750 500 -100 50\n"
         )
 
     def parse(self, args_str):

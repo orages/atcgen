@@ -102,7 +102,7 @@ fading
 ------
 Add a fade in and fade out effect to the events.
 
-Active by default with preset:
+Active by default with presets:
   - fade in duration: 750ms
   - fade out duration: 500ms
   - fade in delay: -100cs
@@ -119,13 +119,13 @@ arguments: FADEIN_DURATION FADEOUT_DURATION FADEIN_DELAY FADEOUT_DELAY
 | FADEOUT_DURATION | integer (in ms) | Duration of the fade   |
 |                  |                 | in effect              |
 +------------------+-----------------+------------------------+
-| FADEIN_DELAY     | integer (in ms) | Shift the beginning    |
+| FADEIN_DELAY     | integer (in cs) | Shift the beginning    |
 |                  |                 | of the event to avoid  |
 |                  |                 | overlapping fading     |
 |                  |                 | effect and sung        |
 |                  |                 | syllables.             |
 +------------------+-----------------+------------------------+
-| FADEOUT_DELAY    | integer (in ms) | Shift the end of       |
+| FADEOUT_DELAY    | integer (in cs) | Shift the end of       |
 |                  |                 | the event to avoid     |
 |                  |                 | overlapping fading     |
 |                  |                 | effect and             |
@@ -142,7 +142,7 @@ Examples:
     # then stays still for 0.25s
     # then is sung
     # then disappear in a fade out during 0.5s
-    %effect passing 750 500 -100 50
+    %effect fading 750 500 -100 50
 
 move
 ----
