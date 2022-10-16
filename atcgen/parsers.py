@@ -1,6 +1,6 @@
 from pyparsing import (CaselessKeyword, CharsNotIn, Combine, Group, Keyword,
                        Literal, OneOrMore, Optional, Regex, Suppress, Word,
-                       ZeroOrMore, alphanums, nums, restOfLine)
+                       ZeroOrMore, alphanums, nums, replaceWith, restOfLine)
 
 
 def LyrInstruction(name, caseless=True):
@@ -29,7 +29,9 @@ syllable = CharsNotIn("&\\")
 
 split_word = Suppress('&') + ZeroOrMore(
     syllable + ZeroOrMore(Suppress('\\') + (
-                          (Literal('\\') | Literal('&') | syllable)))
+                          (Literal('\\') | Literal('&') | Literal(
+                              'n').setParseAction(
+                              replaceWith('\n')) | syllable)))
 ).setParseAction(lambda t: ''.join(t))
 
 LYRICS_PARSER = ZeroOrMore(split_word) + Optional(
