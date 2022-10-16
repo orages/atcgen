@@ -3,7 +3,6 @@ atcgen Generator
 """
 
 import os
-import sys
 import logging
 import importlib
 from pkgutil import iter_modules
