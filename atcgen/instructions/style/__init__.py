@@ -11,8 +11,10 @@ from pyparsing import (Optional, Word, Suppress, QuotedString, Group,
 _LOGGER = logging.getLogger("generator.instructions.style")
 STYLE_DIR = os.path.dirname(__file__)
 
-STYLE_NAME = Word(alphanums + '_').setName("Name") + Optional(
-    Suppress(':') + Word(alphanums).setName("Parent")).leaveWhitespace()
+NAME_CHARSET = alphanums + "-_"
+
+STYLE_NAME = Word(NAME_CHARSET).setName("Name") + Optional(
+    Suppress(':') + Word(NAME_CHARSET).setName("Parent")).leaveWhitespace()
 STYLE_ASSIGNATION = (
     Word(alphanums) + (
         Suppress('=') + (
