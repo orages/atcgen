@@ -12,7 +12,8 @@ def UINTEGER(name):
     return Word(nums).setParseAction(tokenMap(int)).setName(name)
 
 
-CREDIT_PARSER = UINTEGER("begin") + UINTEGER("end") + restOfLine.setName("txt")
+CREDIT_PARSER = (UINTEGER("begin") + UINTEGER(
+                 "end") + restOfLine.setName("txt"))
 
 _LOGGER = logging.getLogger(__name__)
 
