@@ -70,6 +70,51 @@ Manage event-level effects
 
 available_effects:
 
+color, colour, colors, colours
+------------------------------
+Change text color inside an event.
+
+arguments: STATUS COLOUR_BEFORE COLOUR_DURING COLOUR_AFTER
+
++-----------------+-----------------+-------------------------+
+| argument name   | argument type   | description             |
++=================+=================+=========================+
+| STATUS          | text            | 'y', 'yes', 't', 'true',|
+|                 |                 | 'on' or '1' to enable   |
+|                 |                 | the effect, 'n', 'no',  |
+|                 |                 | 'f', 'false', 'off',    |
+|                 |                 | or '0' to disable it.   |
++-----------------+-----------------+-------------------------+
+| COLOUR_BEFORE   | RGB or RGBA     | SecondaryColour         |
+|                 | hexadecimal     |                         |
+|                 | sequences       |                         |
++-----------------+-----------------+-------------------------+
+| COLOUR_DURING   | RGB or RGBA     | KaraokeColour           |
+|                 | hexadecimal     |                         |
+|                 | sequences       |                         |
++-----------------+-----------------+-------------------------+
+| COLOUR_AFTER    | RGB or RGBA     | PrimaryColour           |
+|                 | hexadecimal     |                         |
+|                 | sequences       |                         |
++-----------------+-----------------+-------------------------+
+
+Status can be used to stop the effect from changing the
+next events.
+To cancel in the middle of an event, use the "reset" effect.
+
+Examples:
+
+::
+
+    # set color_before as red for the word "akai" only
+    %colour 00FFFF 00FF00 FF0000
+    &IN &MY &DREAM \
+    %effect colour on 0000FF 00FF00 FF0000
+    &a&ka&i \
+    %effect reset
+    %effect colour off
+    &ba&ra &no &ha&na
+
 cursor
 ------
 Add a line of cursors matching the karaoke syllables.
@@ -268,6 +313,28 @@ Examples:
 
     # display text at 190 110
     %effect position on 190 110
+
+reset
+-----
+Reset style override for the remaining of the current event.
+
+arguments: 
+
++-----------------+-----------------+-------------------------+
+| argument name   | argument type   | description             |
++=================+=================+=========================+
+|                 |                 |                         |
++-----------------+-----------------+-------------------------+
+
+Cancel all style overrides (colours, underline, ...)
+for the end of the event.
+
+Examples:
+
+::
+
+    # reset all style overrides
+    %effect reset
 
 snap
 ----
