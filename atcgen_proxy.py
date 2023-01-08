@@ -2,14 +2,14 @@
 Entry points & functions to use atcgen without installing it.
 """
 
-from os.path import join as pjoin, dirname
+from os.path import join as pjoin, dirname, abspath
 import importlib
 import importlib.machinery
 import importlib.util
 
 
 def get_atcgen_package():
-    atcgen_path = pjoin(dirname(dirname(__file__)), "atcgen")
+    atcgen_path = pjoin(dirname(dirname(abspath(__file__))), "atcgen")
     finder = importlib.machinery.FileFinder(atcgen_path)
     spec = finder.find_spec(
         "atcgen",
@@ -20,6 +20,7 @@ def get_atcgen_package():
 
 
 def main():
+    pkg = get_atcgen_package()
     from atcgen import generator
     generator.main()
 
