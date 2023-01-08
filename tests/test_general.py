@@ -6,7 +6,7 @@ class TestGenerate(unittest.TestCase):
     maxDiff = None
 
     def test_basic(self):
-        lyr_content = "&aa&bb&cc\n&dd&ee&ff\n"
+        lyr_content = "&aa\\\n&bb\\\n&cc\n&dd&ee&ff\n"
         tim_content = ("515 540\n555 578\n585 600\n"
                        "660 710\n724 792\n809 874\n")
 
@@ -34,7 +34,9 @@ Dialogue: 0, 0:00:05.60, 0:00:09.24, Default, , 0, 0, 0, , {\fade(750, 500)}{\kt
 
 
 [lyr]
-;&aa&bb&cc
+;&aa\
+;&bb\
+;&cc
 ;&dd&ee&ff
 ;
 
