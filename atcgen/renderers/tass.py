@@ -66,7 +66,7 @@ class TassRenderer(BaseRenderer):
         return '\n'.join(lines)
 
     def escape(self, text):
-        pass
+        return escape(text)
 
     def render_events(self, events):
         events_to_render = events["processed"]
