@@ -104,10 +104,18 @@ class ColourEffect(Effect):
         values = {
             "active_on_events": set(),
             "status": parsed_args[0],
-            'before': self.colour_component_list_to_str(parsed_args[1]),
-            'during': self.colour_component_list_to_str(parsed_args[2]),
-            'after': self.colour_component_list_to_str(parsed_args[3]),
+            "before": None,
+            "during": None,
+            "after": None,
         }
+        if len(parsed_args) >= 4:
+            values["before"] = self.colour_component_list_to_str(
+                parsed_args[1])
+            values["during"] = self.colour_component_list_to_str(
+                parsed_args[2])
+            values["after"] = self.colour_component_list_to_str(
+                parsed_args[3])
+
         context["effects"]["colour"] = values
         event = context["events"]["current"]
         if event is not None:
