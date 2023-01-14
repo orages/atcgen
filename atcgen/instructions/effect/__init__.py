@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 
 from atcgen.instruction import BaseInstruction
 
-from pyparsing import (Suppress, QuotedString, CharsNotIn, restOfLine)
+from pyparsing import (Suppress, QuotedString, CharsNotIn, Optional,
+                       restOfLine)
 
 from pkgutil import iter_modules
 import importlib
@@ -18,7 +19,9 @@ EFFECT_NAME = (
         ' ')).setName("name")
 EFFECT_ARGS = restOfLine.setName("args")
 
-EFFECT_PARSER = (EFFECT_NAME + Suppress(' ').leaveWhitespace() + EFFECT_ARGS)
+EFFECT_PARSER = (
+    EFFECT_NAME + Optional(
+        Suppress(' ').leaveWhitespace() + EFFECT_ARGS, default=''))
 
 
 class EffectException(Exception):
